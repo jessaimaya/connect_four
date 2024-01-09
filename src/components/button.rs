@@ -1,20 +1,18 @@
-use leptos::*;
-use stylers::{style, style_str};
 use crate::components::app::{Game, GameState};
+use leptos::*;
+use std::option::Option;
+use stylers::{style, style_str};
 
 #[component]
 pub fn Button(
     text: String,
     to_state: GameState,
-    #[prop(default = String::from("--white"))]
-    bg_color: String,
-    #[prop(default = String::from("--black"))]
-    color: String,
-    #[prop(default = false)]
-    with_icon: bool,
+    #[prop(default = String::from("--white"))] bg_color: String,
+    #[prop(default = String::from("--black"))] color: String,
+    #[prop(default = false)] with_icon: bool,
 ) -> impl IntoView {
     // having bg_color as --purple I want to pass it like var(--purple) to the style! macro
-    let styler_class = style!{"button",
+    let styler_class = style! {"button",
         button {
             width: 100%;
             margin: 10px;
@@ -43,7 +41,7 @@ pub fn Button(
         }
     };
     let setter = use_context::<WriteSignal<Game>>();
-      match setter {
+    match setter {
         Some(setter) => {
             if with_icon {
                 view! {
@@ -71,9 +69,35 @@ pub fn Button(
                     </button>
                 }
             }
-        },
-        None => {
-          view!{<button>{text}</button>}
         }
+        None => {
+            view! {<button>{text}</button>}
+        }
+    }
+}
+
+#[component]
+pub fn MenuButton<F>(text: String, mut action: F) -> impl IntoView
+where
+    F: FnMut() + 'static,
+{
+    let style = style! {"MenuButton",
+        button {
+            background-color: var(--purple);
+            color: var(--white);
+            border-radius: 50px;
+            padding: 10px;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        button:hover {
+            background-color: var(--pink);
+        }
+    };
+    view! {
+        <button on:click=move |_| action() >
+            {text}
+        </button>
     }
 }
