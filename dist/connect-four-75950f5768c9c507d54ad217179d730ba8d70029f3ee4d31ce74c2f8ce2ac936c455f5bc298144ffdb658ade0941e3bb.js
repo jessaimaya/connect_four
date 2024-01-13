@@ -530,16 +530,16 @@ function __wbg_get_imports() {
     imports.wbg.__wbindgen_throw = function(arg0, arg1) {
         throw new Error(getStringFromWasm0(arg0, arg1));
     };
-    imports.wbg.__wbindgen_closure_wrapper660 = function(arg0, arg1, arg2) {
+    imports.wbg.__wbindgen_closure_wrapper675 = function(arg0, arg1, arg2) {
         const ret = makeMutClosure(arg0, arg1, 24, __wbg_adapter_20);
         return addHeapObject(ret);
     };
-    imports.wbg.__wbindgen_closure_wrapper2062 = function(arg0, arg1, arg2) {
-        const ret = makeMutClosure(arg0, arg1, 291, __wbg_adapter_23);
+    imports.wbg.__wbindgen_closure_wrapper2109 = function(arg0, arg1, arg2) {
+        const ret = makeMutClosure(arg0, arg1, 297, __wbg_adapter_23);
         return addHeapObject(ret);
     };
-    imports.wbg.__wbindgen_closure_wrapper2064 = function(arg0, arg1, arg2) {
-        const ret = makeMutClosure(arg0, arg1, 293, __wbg_adapter_26);
+    imports.wbg.__wbindgen_closure_wrapper2111 = function(arg0, arg1, arg2) {
+        const ret = makeMutClosure(arg0, arg1, 299, __wbg_adapter_26);
         return addHeapObject(ret);
     };
 
@@ -580,7 +580,7 @@ async function __wbg_init(input) {
     if (wasm !== undefined) return wasm;
 
     if (typeof input === 'undefined') {
-        input = new URL('connect-four-c56369cc6d77c4f8c5c900e2929cddc922044b854ea3dbc4299af57aa3a46171b3d9af5191a08584560fd795363ac109_bg.wasm', import.meta.url);
+        input = new URL('connect-four-75950f5768c9c507d54ad217179d730ba8d70029f3ee4d31ce74c2f8ce2ac936c455f5bc298144ffdb658ade0941e3bb_bg.wasm', import.meta.url);
     }
     const imports = __wbg_get_imports();
 

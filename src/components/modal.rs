@@ -1,19 +1,18 @@
-use leptos::*;
-use stylers::{ style_str};
 use crate::components::app::{Game, GameState};
+use leptos::*;
+use stylers::style_str;
 
 #[component]
-pub fn Modal <T>(
+pub fn Modal<T>(
     header: T,
-    #[prop(default = String::from("--purple"))]
-    bg_color: String,
-    #[prop(default = false )]
-    overlay: bool,
-    #[prop(default = false )]
-    check_button: bool,
+    #[prop(default = String::from("--purple"))] bg_color: String,
+    #[prop(default = false)] overlay: bool,
+    #[prop(default = false)] check_button: bool,
     children: Children,
 ) -> impl IntoView
-where T: IntoView {
+where
+    T: IntoView,
+{
     let (class_name, style_val) = style_str!("modal",
         .modal {
             width: 100%;
@@ -22,6 +21,7 @@ where T: IntoView {
             align-items: center;
             justify-content: center;
             position: fixed;
+            background-color: rgba(0, 0, 0, 0.2);
         }
         .modal-content {
             width: 480px;
@@ -60,7 +60,7 @@ where T: IntoView {
             bottom: -32px;
             left: 50%;
             cursor:pointer;
-            margin-left: -32px;
+            margin-left: -16px;
             text-align: center;
             background-color: var(--pink);
             border: 3px solid var(--black);

@@ -25,7 +25,7 @@ pub const APP_CLASS: &str = style! {"App",
         align-items: center;
         justify-content: center;
         height: 100vh;
-        background-color: var(--purple);
+        background-color: var(--purple-light);
         color: var(--white);
         padding: 0;
         margin: 0;

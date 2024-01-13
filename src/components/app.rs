@@ -56,7 +56,7 @@ pub fn App() -> impl IntoView {
     });
 
     view! { class = APP_CLASS,
-        <main class="app">
+        <main class="app" >
             <Show
                 when= move || {current_state() == GameState::Menu}
                 fallback= || {view!{}}

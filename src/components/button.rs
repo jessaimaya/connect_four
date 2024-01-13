@@ -89,6 +89,8 @@ where
             padding: 10px;
             text-transform: uppercase;
             text-align: center;
+            border: none;
+            cursor: pointer;
         }
 
         button:hover {
@@ -96,6 +98,7 @@ where
         }
     };
     view! {
+        class=style,
         <button on:click=move |_| action() >
             {text}
         </button>
