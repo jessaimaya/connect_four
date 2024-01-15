@@ -1,16 +1,30 @@
 use crate::components::app::{Game, GameState};
 use crate::components::button::MenuButton;
+use leptos::wasm_bindgen::prelude::wasm_bindgen;
+use leptos::wasm_bindgen::{JsCast, JsValue};
 use leptos::*;
 use std::option::Option;
-use stylers::style;
+use stylers::{style, style_str};
 
 #[derive(Debug, Clone, PartialEq)]
-struct GamePlay {
+pub struct GamePlay {
     player1_score: u32,
     player2_score: u32,
     current_player: Player,
     time_remaining: u32,
     winner: Option<Player>,
+}
+
+impl GamePlay {
+    fn new() -> Self {
+        Self {
+            player1_score: 0,
+            player2_score: 0,
+            current_player: Player::Player1,
+            time_remaining: 14,
+            winner: None,
+        }
+    }
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -19,9 +33,23 @@ pub enum Player {
     Player2,
 }
 
+#[wasm_bindgen]
+pub fn get_grid_width(id: &str) -> Result<u32, JsValue> {
+    let document = web_sys::window().unwrap().document().unwrap();
+    let grid = document.get_element_by_id(id).unwrap();
+    let grid_width = grid.dyn_into::<web_sys::HtmlElement>()?.offset_width();
+    Ok(grid_width as u32)
+}
+
 #[component]
 pub fn GamePlay() -> impl IntoView {
     let game = use_context::<WriteSignal<Game>>();
+    let game_play = GamePlay::new();
+    let current_player_marker = match game_play.current_player.clone() {
+        Player::Player1 => "url('assets/turn_pink.svg')",
+        Player::Player2 => "url('assets/turn_yellow.svg')",
+    };
+    let (mouse_x, set_mouse_x) = create_signal(0);
     let styles = style! {"gameplay",
         main {
             width: 100%;
@@ -47,9 +75,9 @@ pub fn GamePlay() -> impl IntoView {
             position: relative;
         }
         .grid {
-            width: 100%;
             position: relative;
             max-width: 650px;
+            cursor: pointer;
         }
         .board_black {
             top: 0;
@@ -118,20 +146,6 @@ pub fn GamePlay() -> impl IntoView {
             z-index: 1;
             margin-bottom: -120px;
             position: absolute;
-            background-color: var(--white);
-            border-radius: 20px;
-            border: solid 3px var(--black);
-            border-bottom: solid 10px var(--black);
-        }
-        .timer::before {
-            content: "";
-            position: absolute;
-            top: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            border-left: 10px solid transparent;
-            border-right: 10px solid transparent;
-            border-bottom: 10px solid var(--white);
         }
         .timer-turn {
             font-size: var(--text-small);
@@ -145,6 +159,18 @@ pub fn GamePlay() -> impl IntoView {
             font-weight: bold;
             color: var(--black);
             margin-bottom: 10px;
+        }
+        .marker {
+            width: 33px;
+            height: 36px;
+            position: absolute;
+            top: -15px;
+            background-image: url("assets/mark.svg");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 100%;
+            z-index: 2;
+            transform:translate(-50%,-50%);
         }
     };
     view! {
@@ -161,7 +187,16 @@ pub fn GamePlay() -> impl IntoView {
                     <span class="player-name">Player 1</span>
                     <span class="player-score">{0}</span>
                 </div>
-                <div class="grid">
+                <div class="grid"
+                    id="grid"
+                    on:mousemove={move |event| {
+                        let grid_width = event.target().unwrap().dyn_into::<web_sys::HtmlElement>().unwrap().offset_width();
+                        let step = grid_width / 7;
+                        let new_x = ((event.offset_x() / step) * step);
+                        set_mouse_x(new_x + (step / 2));
+                    }}
+                >
+                    <div class="marker" style:left=move || format!("{:?}px", mouse_x())></div>
                     <img src="assets/black_board.svg" alt="dashboard" class="board_black"/>
                     <img src="assets/white_board.svg" alt="dashboard" class="board_white"/>
                 </div>
@@ -170,7 +205,7 @@ pub fn GamePlay() -> impl IntoView {
                     <span class="player-name">Player 2</span>
                     <span class="player-score">{0}</span>
                 </div>
-                <div class="timer">
+                <div class="timer" style={format!("background-image: {};", current_player_marker)}>
                     <span class="timer-turn">"Player 2's turn"</span>
                     <span class="timer-value">"14s"</span>
                 </div>
